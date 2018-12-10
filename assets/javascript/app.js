@@ -7,7 +7,7 @@ const apiKey = "mHPwUCR4iqfbPQYqVDWzCold4ROczEgf";
 function buildQueryUrl(query, limit, rating) {
   let url = "https://api.giphy.com/v1/gifs/search?lang=en";
   url += "&api_key=" + apiKey;
-  url += "&q=" + query;
+  url += "&q=" + encodeURIComponent(query);
   url += "&limit=" + limit;
   url += "&rating=" + rating;
   return url;
@@ -21,7 +21,7 @@ function fillTopicBar() {
     button.addClass("topic");
     button.attr("data-topic", topic);
     button.text(topic);
-    button.on("click", () => {
+    button.click(() => {
       const target = $(event.currentTarget);
       const newTopic = target.attr("data-topic");
       setTopic(newTopic);
@@ -43,7 +43,7 @@ function handleResponse(response) {
     image.attr("data-is-moving", "false");
     image.attr("data-moving-url", result.images.fixed_height.url);
     image.attr("data-still-url", result.images.fixed_height_still.url);
-    image.on("click", (event) => {
+    image.click((event) => {
       const target = $(event.currentTarget);
       const isMoving = target.attr("data-is-moving");
       if (isMoving === "true") {
@@ -77,4 +77,11 @@ function setTopic(topic) {
 
 $(document).ready(() => {
   fillTopicBar();
+
+  $("#add-topic").submit((event) => {
+    event.preventDefault();
+    const topic = $("#topic-name").val();
+    topics.push(topic);
+    fillTopicBar();
+  });
 });
