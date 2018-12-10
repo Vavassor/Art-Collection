@@ -65,6 +65,15 @@ function handleResponse(response) {
   }
 }
 
+function isNewTopic(topic) {
+  if (topic === "") {
+    return false;
+  } else {
+    const localeTopic = topic.toLocaleLowerCase();
+    return !topics.some(name => name.toLocaleLowerCase() === localeTopic);
+  }
+}
+
 function setTopic(topic) {
   const queryUrl = buildQueryUrl(topic, 10, "pg-13");
   
@@ -81,7 +90,9 @@ $(document).ready(() => {
   $("#add-topic").submit((event) => {
     event.preventDefault();
     const topic = $("#topic-name").val();
-    topics.push(topic);
-    fillTopicBar();
+    if (isNewTopic(topic)) {
+      topics.push(topic);
+      fillTopicBar();
+    }
   });
 });
