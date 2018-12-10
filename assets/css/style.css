@@ -1,0 +1,23 @@
+main {
+  display: flex;
+  flex-wrap: wrap;
+  padding: .5em;
+}
+
+.gif-card {
+  padding: .5em;
+}
+
+.rating {
+  margin: 1em 0; 
+}
+
+.topic {
+  margin: .5em;
+}
+
+.topics {
+  display: flex;
+  flex-wrap: wrap;
+  padding: .5em;
+}
