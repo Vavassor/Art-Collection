@@ -54,24 +54,24 @@ main {
     grid-template-areas:
       ". header . ."
       ". main controls .";
-    grid-template-columns: 1fr 400px 140px 1fr;
+    grid-template-columns: 1fr 360px 180px 1fr;
   }
 }
 
 @media screen and (min-width: 768px) {
   body {
-    grid-template-columns: 1fr 580px 140px 1fr;
+    grid-template-columns: 1fr 480px 240px 1fr;
   }
 }
 
 @media screen and (min-width: 992px) {
   body {
-    grid-template-columns: 1fr 820px 140px 1fr;
+    grid-template-columns: 1fr 720px 240px 1fr;
   }
 }
 
 @media screen and (min-width: 1200px) {
   body {
-    grid-template-columns: 1fr 1000px 140px 1fr;
+    grid-template-columns: 1fr 900px 240px 1fr;
   }
 }
