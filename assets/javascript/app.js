@@ -1,7 +1,9 @@
 "use strict";
 
+let currentOffset;
 let topics = ["Pixel", "Glitch", "Abstract", "Pattern", "Illusion", "Stereographic", "Surreal", "Sculpture", "Fractal", "Drawing", "Watercolor"];
 const apiKey = "mHPwUCR4iqfbPQYqVDWzCold4ROczEgf";
+const imagesPerRequest = 10;
 
 
 function buildQueryUrl(query, limit, rating) {
@@ -38,6 +40,7 @@ function handleResponse(response) {
   for (const result of response.data) {
     const division = $("<div>");
     division.addClass("gif-card");
+    division.css("width", result.images.fixed_height.width);
 
     const image = $("<img>");
     image.attr("src", result.images.fixed_height_still.url);
@@ -57,10 +60,16 @@ function handleResponse(response) {
     });
     division.append(image);
 
-    const paragraph = $("<p>");
-    paragraph.addClass("rating");
-    paragraph.text("Rating " + result.rating.toUpperCase());
-    division.append(paragraph);
+    const title = $("<a>");
+    title.addClass("metadata");
+    title.attr("href", result.url);
+    title.text(result.title);
+    division.append(title);
+
+    const rating = $("<p>");
+    rating.addClass("metadata");
+    rating.text("Rating " + result.rating.toUpperCase());
+    division.append(rating);
 
     $("main").append(division);
   }
@@ -76,7 +85,9 @@ function isNewTopic(topic) {
 }
 
 function setTopic(topic) {
-  const queryUrl = buildQueryUrl(topic, 10, "pg-13");
+  currentOffset = 0;
+
+  const queryUrl = buildQueryUrl(topic, imagesPerRequest, "pg-13");
   
   $.ajax({
     url: queryUrl,

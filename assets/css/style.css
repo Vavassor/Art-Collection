@@ -19,6 +19,7 @@ main {
   display: flex;
   flex-wrap: wrap;
   grid-area: main;
+  justify-content: space-between;
   padding: .5em;
 }
 
@@ -31,7 +32,12 @@ main {
   padding: .5em;
 }
 
-.rating {
+.instructions {
+  margin-top: .5em;
+}
+
+.metadata {
+  display: block;
   margin: 1em 0; 
 }
 
@@ -46,15 +52,20 @@ main {
 .topics {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   padding: .5em;
 }
 
 @media screen and (min-width: 576px) {
   body {
     grid-template-areas:
-      ". header . ."
+      ". header controls ."
       ". main controls .";
     grid-template-columns: 1fr 360px 180px 1fr;
+  }
+
+  .instructions {
+    margin-top: 2em;
   }
 }
 
