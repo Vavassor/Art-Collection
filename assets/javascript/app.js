@@ -35,8 +35,6 @@ function fillTopicBar() {
 function handleResponse(response) {
   $("main").empty();
 
-  console.log(response);
-
   for (const result of response.data) {
     const division = $("<div>");
     division.addClass("gif-card");
@@ -70,6 +68,12 @@ function handleResponse(response) {
     rating.addClass("metadata");
     rating.text("Rating " + result.rating.toUpperCase());
     division.append(rating);
+
+    const download = $("<a>");
+    download.addClass("metadata");
+    download.text("Download");
+    download.attr("href", result.images.original.url);
+    division.append(download);
 
     $("main").append(division);
   }

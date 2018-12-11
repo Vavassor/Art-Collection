@@ -32,6 +32,10 @@ main {
   padding: .5em;
 }
 
+.hidden {
+  display: none;
+}
+
 .instructions {
   margin-top: .5em;
 }
