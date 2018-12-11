@@ -1,6 +1,6 @@
 "use strict";
 
-let topics = ["Penguin", "Walrus", "Crow", "Lion", "Deer", "Bear", "Prairie Dog"];
+let topics = ["Pixel", "Glitch", "Abstract", "Pattern", "Illusion", "Stereographic", "Surreal", "Sculpture", "Fractal", "Drawing", "Watercolor"];
 const apiKey = "mHPwUCR4iqfbPQYqVDWzCold4ROczEgf";
 
 
@@ -26,13 +26,14 @@ function fillTopicBar() {
       const newTopic = target.attr("data-topic");
       setTopic(newTopic);
     });
-    
     $(".topics").append(button);
   }
 }
 
 function handleResponse(response) {
   $("main").empty();
+
+  console.log(response);
 
   for (const result of response.data) {
     const division = $("<div>");
