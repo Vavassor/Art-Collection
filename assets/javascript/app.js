@@ -1,7 +1,8 @@
 "use strict";
 
 let currentOffset;
-let topics = ["Pixel", "Glitch", "Abstract", "Pattern", "Illusion", "Stereographic", "Surreal", "Sculpture", "Fractal", "Drawing", "Watercolor"];
+let currentTopic;
+let topics = ["Pattern", "Pixel", "Glitch", "Abstract", "Illusion", "Stereographic", "Surreal", "Sculpture", "Fractal", "Drawing", "Watercolor"];
 let favourites = [];
 const apiKey = "mHPwUCR4iqfbPQYqVDWzCold4ROczEgf";
 const imagesPerRequest = 10;
@@ -20,10 +21,11 @@ class StoredImage {
 }
 
 
-function buildQueryUrl(query, limit, rating) {
+function buildQueryUrl(query, offset, limit, rating) {
   let url = "https://api.giphy.com/v1/gifs/search?lang=en";
   url += "&api_key=" + apiKey;
   url += "&q=" + encodeURIComponent(query);
+  url += "&offset=" + offset;
   url += "&limit=" + limit;
   url += "&rating=" + rating;
   return url;
@@ -52,8 +54,10 @@ function fillTopicBar() {
   }
 }
 
-function handleResponse(response) {
-  $("main").empty();
+function handleResponse(response, firstLoad) {
+  if (firstLoad) {
+    $(".images-area").empty();
+  }
 
   for (const result of response.data) {
     const division = $("<div>");
@@ -133,8 +137,10 @@ function handleResponse(response) {
 
     division.append(actionGroup);
 
-    $("main").append(division);
+    $(".images-area").append(division);
   }
+
+  $("#load-more").show();
 }
 
 function isFavourited(url) {
@@ -180,27 +186,46 @@ function saveImage(imageUrl, title) {
 }
 
 function setTopic(topic) {
+  currentTopic = topic;
   currentOffset = 0;
+  $("#load-more").hide();
 
-  const queryUrl = buildQueryUrl(topic, imagesPerRequest, "pg-13");
+  const queryUrl = buildQueryUrl(topic, currentOffset, imagesPerRequest, "pg-13");
   
   $.ajax({
     url: queryUrl,
     method: "GET",
-  }).then(handleResponse);
+  }).then((response) => {
+    handleResponse(response, true);
+  });
+}
+
+function loadMore() {
+  currentOffset += imagesPerRequest;
+  $("#load-more").hide();
+
+  const queryUrl = buildQueryUrl(currentTopic, currentOffset, imagesPerRequest, "pg-13");
+  
+  $.ajax({
+    url: queryUrl,
+    method: "GET",
+  }).then((response) => {
+    handleResponse(response, false);
+  });
 }
 
 function showEmptyFavouritesMessageIfNeeded() {
   if (favourites.length === 0) {
     const emptyMessage = $("<p>");
-    emptyMessage.addClass("empty-favourites-message");
+    emptyMessage.addClass("empty-message");
     emptyMessage.text("Favourite images to see them here!");
-    $("main").append(emptyMessage);
+    $(".images-area").append(emptyMessage);
   }
 }
 
 function showFavourites() {
-  $("main").empty();
+  $("#load-more").hide();
+  $(".images-area").empty();
 
   showEmptyFavouritesMessageIfNeeded();
 
@@ -227,9 +252,11 @@ function showFavourites() {
     });
     division.append(image);
 
-    const title = $("<a>");
-    title.attr("href", favourite.url);
-    title.text(favourite.title);
+    const title = $("<h2>");
+    const titleLink = $("<a>");
+    titleLink.attr("href", favourite.url);
+    titleLink.text(favourite.title);
+    title.append(titleLink);
     division.append(title);
 
     const rating = $("<p>");
@@ -237,14 +264,19 @@ function showFavourites() {
     rating.text("Rating " + favourite.rating);
     division.append(rating);
 
+    const actionGroup = $("<div>");
+    actionGroup.addClass("action-group");
+
     const download = $("<button>");
+    download.addClass("action");
     download.text("Download");
     download.click(() => {
       saveImage(favourite.originalUrl, favourite.title);
     });
-    division.append(download);
+    actionGroup.append(download);
 
     const unfavourite = $("<button>");
+    unfavourite.addClass("action");
     unfavourite.text("Unfavourite");
     unfavourite.click(() => {
       const index = favourites.findIndex(item => item.url === favourite.url);
@@ -253,9 +285,11 @@ function showFavourites() {
       division.remove();
       showEmptyFavouritesMessageIfNeeded();
     });
-    division.append(unfavourite);
+    actionGroup.append(unfavourite);
 
-    $("main").append(division);
+    division.append(actionGroup);
+
+    $(".images-area").append(division);
   }
 }
 
@@ -275,6 +309,7 @@ $(document).ready(() => {
   loadFavourites();
 
   fillTopicBar();
+  setTopic(topics[0]);
 
   $("#add-topic").submit((event) => {
     event.preventDefault();
@@ -284,4 +319,6 @@ $(document).ready(() => {
       fillTopicBar();
     }
   });
+
+  $("#load-more").click(loadMore);
 });

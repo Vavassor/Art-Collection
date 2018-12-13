@@ -20,11 +20,7 @@ input {
 }
 
 main {
-  display: flex;
-  flex-wrap: wrap;
   grid-area: main;
-  justify-content: space-between;
-  padding: .5em;
 }
 
 .action {
@@ -44,7 +40,7 @@ main {
   padding: 1em;
 }
 
-.empty-favourites-message {
+.empty-message {
   padding: .5em;
 }
 
@@ -54,6 +50,19 @@ main {
 
 .hidden {
   display: none;
+}
+
+.images-area {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: .5em;
+}
+
+.images-footer {
+  display: flex;
+  justify-content: center;
+  padding: 1em;
 }
 
 .instructions {
@@ -78,6 +87,13 @@ main {
   flex-wrap: wrap;
   justify-content: space-between;
   padding: .5em;
+}
+
+#load-more {
+  border-radius: .5em;
+  display: block;
+  padding: 1em;
+  width: 50%;
 }
 
 @media screen and (min-width: 576px) {
