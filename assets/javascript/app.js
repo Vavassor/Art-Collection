@@ -36,12 +36,14 @@ function fillTopicBar() {
 
   const favouritesButton = $("<button type=\"button\">");
   favouritesButton.addClass("topic");
+  favouritesButton.addClass("button-generic");
   favouritesButton.text("Favourites");
   favouritesButton.click(showFavourites);
   $(".topics").append(favouritesButton);
 
   for (const topic of topics) {
     const button = $("<button type=\"button\">");
+    button.addClass("button-generic");
     button.addClass("topic");
     button.attr("data-topic", topic);
     button.text(topic);
@@ -108,6 +110,7 @@ function handleResponse(response, firstLoad) {
     actionGroup.addClass("action-group");
 
     const download = $("<button>");
+    download.addClass("button-generic");
     download.addClass("action");
     download.text("Download");
     download.click(() => {
@@ -116,6 +119,7 @@ function handleResponse(response, firstLoad) {
     actionGroup.append(download);
 
     const favourite = $("<button>");
+    favourite.addClass("button-generic");
     favourite.addClass("action");
     favourite.text("Favourite");
     favourite.click(() => {
@@ -268,6 +272,7 @@ function showFavourites() {
     actionGroup.addClass("action-group");
 
     const download = $("<button>");
+    download.addClass("button-generic");
     download.addClass("action");
     download.text("Download");
     download.click(() => {
@@ -276,6 +281,7 @@ function showFavourites() {
     actionGroup.append(download);
 
     const unfavourite = $("<button>");
+    unfavourite.addClass("button-generic");
     unfavourite.addClass("action");
     unfavourite.text("Unfavourite");
     unfavourite.click(() => {
