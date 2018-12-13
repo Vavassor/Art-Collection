@@ -27,6 +27,18 @@ main {
   padding: .5em;
 }
 
+.action {
+  margin-right: .5em;
+}
+
+.action:last-child {
+  margin-right: 0;
+}
+
+.action-group {
+  display: flex;
+}
+
 .controls {
   grid-area: controls;
   padding: 1em;

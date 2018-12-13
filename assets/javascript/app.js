@@ -87,10 +87,12 @@ function handleResponse(response) {
     let imageRating = result.rating.toUpperCase();
 
     const title = $("<h2>");
+
     const titleLink = $("<a>");
     titleLink.attr("href", result.url);
     titleLink.text(imageTitle);
     title.append(titleLink);
+
     division.append(title);
 
     const rating = $("<p>");
@@ -98,14 +100,19 @@ function handleResponse(response) {
     rating.text("Rating " + imageRating);
     division.append(rating);
 
+    const actionGroup = $("<div>");
+    actionGroup.addClass("action-group");
+
     const download = $("<button>");
+    download.addClass("action");
     download.text("Download");
     download.click(() => {
       saveImage(result.images.original.url, imageTitle);
     });
-    division.append(download);
+    actionGroup.append(download);
 
     const favourite = $("<button>");
+    favourite.addClass("action");
     favourite.text("Favourite");
     favourite.click(() => {
       if (!isFavourited(result.url)) {
@@ -122,7 +129,9 @@ function handleResponse(response) {
         saveFavourites();
       }
     });
-    division.append(favourite);
+    actionGroup.append(favourite);
+
+    division.append(actionGroup);
 
     $("main").append(division);
   }
@@ -181,7 +190,7 @@ function setTopic(topic) {
   }).then(handleResponse);
 }
 
-function showEmptyFavouritesIfNeeded() {
+function showEmptyFavouritesMessageIfNeeded() {
   if (favourites.length === 0) {
     const emptyMessage = $("<p>");
     emptyMessage.addClass("empty-favourites-message");
@@ -193,7 +202,7 @@ function showEmptyFavouritesIfNeeded() {
 function showFavourites() {
   $("main").empty();
 
-  showEmptyFavouritesIfNeeded();
+  showEmptyFavouritesMessageIfNeeded();
 
   for (const favourite of favourites) {
     const division = $("<div>");
@@ -242,7 +251,7 @@ function showFavourites() {
       favourites.splice(index, 1);
       saveFavourites();
       division.remove();
-      showEmptyFavouritesIfNeeded();
+      showEmptyFavouritesMessageIfNeeded();
     });
     division.append(unfavourite);
 
