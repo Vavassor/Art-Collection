@@ -58,10 +58,15 @@ function handleResponse(response) {
     });
     division.append(image);
 
+    let imageTitle = result.title;
+    if (imageTitle === "") {
+      imageTitle = "Untitled";
+    }
+
     const title = $("<a>");
     title.addClass("metadata");
     title.attr("href", result.url);
-    title.text(result.title);
+    title.text(imageTitle);
     division.append(title);
 
     const rating = $("<p>");
@@ -69,10 +74,12 @@ function handleResponse(response) {
     rating.text("Rating " + result.rating.toUpperCase());
     division.append(rating);
 
-    const download = $("<a>");
+    const download = $("<button>");
     download.addClass("metadata");
     download.text("Download");
-    download.attr("href", result.images.original.url);
+    download.click(() => {
+      saveImage(result.images.original.url, imageTitle);
+    });
     division.append(download);
 
     $("main").append(division);
@@ -84,8 +91,32 @@ function isNewTopic(topic) {
     return false;
   } else {
     const localeTopic = topic.toLocaleLowerCase();
-    return !topics.some(name => name.toLocaleLowerCase() === localeTopic);
+    for (const name of topics) {
+      if (name.toLocaleLowerCase() === localeTopic) {
+        return false;
+      }
+    }
+    return true;
   }
+}
+
+function saveImage(imageUrl, title) {
+  $.ajax({
+    method: "GET",
+    url: imageUrl,
+    xhrFields: {
+      responseType: "blob",
+    },
+  }).then((response) => {
+    const url = URL.createObjectURL(response);
+
+    const tempAnchor = $("<a>");
+    tempAnchor.attr("download", title);
+    tempAnchor.attr("href", url);
+    tempAnchor[0].click();
+
+    URL.revokeObjectURL(url);
+  });
 }
 
 function setTopic(topic) {
