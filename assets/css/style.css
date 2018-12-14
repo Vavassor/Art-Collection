@@ -103,21 +103,25 @@ main {
 }
 
 @media screen and (min-width: 576px) {
-  body {
+  body { 
     grid-template-areas:
-      ". header controls ."
-      ". main controls .";
-    grid-template-columns: 1fr 360px 180px 1fr;
-  }
-
-  .instructions {
-    margin-top: 2em;
+      ". header ."
+      ". controls ."
+      ". main .";
+    grid-template-columns: 1fr 540px 1fr;
   }
 }
 
 @media screen and (min-width: 768px) {
   body {
+    grid-template-areas:
+      ". header controls ."
+      ". main controls .";
     grid-template-columns: 1fr 480px 240px 1fr;
+  }
+
+  .instructions {
+    margin-top: 2em;
   }
 }
 

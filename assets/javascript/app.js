@@ -66,24 +66,7 @@ function handleResponse(response, firstLoad) {
     division.addClass("gif-card");
     division.css("width", result.images.fixed_height.width);
 
-    const image = $("<input type=\"image\">");
-    image.attr("alt", "Toggle Animation");
-    image.attr("src", result.images.fixed_height_still.url);
-    image.attr("data-is-moving", "false");
-    image.attr("data-moving-url", result.images.fixed_height.url);
-    image.attr("data-still-url", result.images.fixed_height_still.url);
-    image.click((event) => {
-      const target = $(event.currentTarget);
-      const isMoving = target.attr("data-is-moving");
-      if (isMoving === "true") {
-        target.attr("src", target.attr("data-still-url"));
-        target.attr("data-is-moving", "false");
-      } else {
-        target.attr("src", target.attr("data-moving-url"));
-        target.attr("data-is-moving", "true");
-      }
-    });
-    division.append(image);
+    addImage(division, result.images.fixed_height_still.url, result.images.fixed_height.url);
 
     let imageTitle = result.title;
     if (imageTitle === "") {
@@ -92,31 +75,13 @@ function handleResponse(response, firstLoad) {
 
     let imageRating = result.rating.toUpperCase();
 
-    const title = $("<h2>");
-
-    const titleLink = $("<a>");
-    titleLink.attr("href", result.url);
-    titleLink.text(imageTitle);
-    title.append(titleLink);
-
-    division.append(title);
-
-    const rating = $("<p>");
-    rating.addClass("metadata");
-    rating.text("Rating " + imageRating);
-    division.append(rating);
+    addTitle(division, result.url, imageTitle);
+    addRating(division, imageRating);
 
     const actionGroup = $("<div>");
     actionGroup.addClass("action-group");
 
-    const download = $("<button>");
-    download.addClass("button-generic");
-    download.addClass("action");
-    download.text("Download");
-    download.click(() => {
-      saveImage(result.images.original.url, imageTitle);
-    });
-    actionGroup.append(download);
+    addDownloadButton(actionGroup, result.images.original.url, imageTitle);
 
     const favourite = $("<button>");
     favourite.addClass("button-generic");
@@ -227,6 +192,56 @@ function showEmptyFavouritesMessageIfNeeded() {
   }
 }
 
+function addTitle(group, url, title) {
+  const heading = $("<h2>");
+
+  const titleLink = $("<a>");
+  titleLink.attr("href", url);
+  titleLink.text(title);
+  heading.append(titleLink);
+
+  group.append(heading);
+}
+
+function addDownloadButton(group, url, title) {
+  const download = $("<button>");
+  download.addClass("button-generic");
+  download.addClass("action");
+  download.text("Download");
+  download.click(() => {
+    saveImage(url, title);
+  });
+  group.append(download);
+}
+
+function addImage(group, stillUrl, movingUrl) {
+  const image = $("<input type=\"image\">");
+  image.attr("alt", "Toggle Animation");
+  image.attr("src", stillUrl);
+  image.attr("data-is-moving", "false");
+  image.attr("data-moving-url", movingUrl);
+  image.attr("data-still-url", stillUrl);
+  image.click((event) => {
+    const target = $(event.currentTarget);
+    const isMoving = target.attr("data-is-moving");
+    if (isMoving === "true") {
+      target.attr("src", target.attr("data-still-url"));
+      target.attr("data-is-moving", "false");
+    } else {
+      target.attr("src", target.attr("data-moving-url"));
+      target.attr("data-is-moving", "true");
+    }
+  });
+  group.append(image);
+}
+
+function addRating(group, rating) {
+  const paragraph = $("<p>");
+  paragraph.addClass("metadata");
+  paragraph.text("Rating " + rating);
+  group.append(paragraph);
+}
+
 function showFavourites() {
   $("#load-more").hide();
   $(".images-area").empty();
@@ -238,47 +253,14 @@ function showFavourites() {
     division.addClass("gif-card");
     division.css("width", favourite.width);
 
-    const image = $("<img>");
-    image.attr("src", favourite.stillUrl);
-    image.attr("data-is-moving", "false");
-    image.attr("data-moving-url", favourite.movingUrl);
-    image.attr("data-still-url", favourite.stillUrl);
-    image.click((event) => {
-      const target = $(event.currentTarget);
-      const isMoving = target.attr("data-is-moving");
-      if (isMoving === "true") {
-        target.attr("src", target.attr("data-still-url"));
-        target.attr("data-is-moving", "false");
-      } else {
-        target.attr("src", target.attr("data-moving-url"));
-        target.attr("data-is-moving", "true");
-      }
-    });
-    division.append(image);
-
-    const title = $("<h2>");
-    const titleLink = $("<a>");
-    titleLink.attr("href", favourite.url);
-    titleLink.text(favourite.title);
-    title.append(titleLink);
-    division.append(title);
-
-    const rating = $("<p>");
-    rating.addClass("metadata");
-    rating.text("Rating " + favourite.rating);
-    division.append(rating);
+    addImage(division, favourite.stillUrl, favourite.movingUrl);
+    addTitle(division, favourite.url, favourite.title);
+    addRating(division, favourite.rating);
 
     const actionGroup = $("<div>");
     actionGroup.addClass("action-group");
 
-    const download = $("<button>");
-    download.addClass("button-generic");
-    download.addClass("action");
-    download.text("Download");
-    download.click(() => {
-      saveImage(favourite.originalUrl, favourite.title);
-    });
-    actionGroup.append(download);
+    addDownloadButton(actionGroup, favourite.originalUrl, favourite.title);
 
     const unfavourite = $("<button>");
     unfavourite.addClass("button-generic");
