@@ -3,7 +3,7 @@ a {
   text-decoration: none;
 }
 
-a:hover {
+a:focus, a:hover {
   text-decoration: underline;
 }
 
@@ -60,6 +60,10 @@ p {
   font-family: "ABeeZee", sans-serif;
   font-size: 1em;
   padding: .5em;
+}
+
+.button-generic:focus, .button-generic:hover {
+  background-color: #9f9f9f;
 }
 
 .controls {
@@ -131,11 +135,17 @@ p {
 }
 
 #load-more {
-  background-color: #ffafcf;
+  background-color: #c6519b;
   border: none;
-  color: #000000;
+  color: #ffffff;
   display: block;
+  padding: 1em;
   width: 50%;
+}
+
+#load-more:focus, #load-more:hover {
+  background-color: #ffafcf;
+  color: #000000;
 }
 
 #topic-name {
