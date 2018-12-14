@@ -34,7 +34,7 @@ function fillTopicBar() {
     button.addClass("topic");
     button.attr("data-topic", topic);
     button.text(topic);
-    button.click(() => {
+    button.click((event) => {
       const target = $(event.currentTarget);
       const newTopic = target.attr("data-topic");
       setTopic(newTopic);
@@ -309,6 +309,7 @@ $(document).ready(() => {
     if (isNewTopic(topic)) {
       topics.push(topic);
       fillTopicBar();
+      $("#topic-name").val("");
     }
   });
 
