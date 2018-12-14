@@ -127,22 +127,35 @@ function isNewTopic(topic) {
 }
 
 function saveImage(imageUrl, title) {
-  $.ajax({
-    method: "GET",
-    url: imageUrl,
-    xhrFields: {
-      responseType: "blob",
-    },
-  }).then((response) => {
-    const url = URL.createObjectURL(response);
+  if ("download" in HTMLAnchorElement.prototype) {
+    // A file can be downloaded using the download attribute of an anchor tag.
+    // However, most browsers don't allow cross-origin URLs using this method.
+    // The workaround is to download the file as a "blob" object, give it an
+    // object URL on the client-side, and then download it through that URL
+    // using the anchor method.
+    $.ajax({
+      method: "GET",
+      url: imageUrl,
+      xhrFields: {
+        responseType: "blob",
+      },
+    }).then((response) => {
+        const url = URL.createObjectURL(response);
 
-    const tempAnchor = $("<a>");
-    tempAnchor.attr("download", title);
-    tempAnchor.attr("href", url);
-    tempAnchor[0].click();
-
-    URL.revokeObjectURL(url);
-  });
+        const tempAnchor = $("<a>");
+        tempAnchor.attr("download", title);
+        tempAnchor.attr("href", url);
+        $(document.body).append(tempAnchor);
+        tempAnchor[0].click();
+    
+        tempAnchor.remove();
+        URL.revokeObjectURL(url);
+    });
+  } else {
+    // As of December 14, 2018, Safari on iOS and Internet Explorer don't have
+    // the download attribute, so fall back to just redirecting.
+    window.location.href = imageUrl;
+  }
 }
 
 function setTopic(topic) {
