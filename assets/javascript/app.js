@@ -8,19 +8,6 @@ const apiKey = "mHPwUCR4iqfbPQYqVDWzCold4ROczEgf";
 const imagesPerRequest = 10;
 
 
-class StoredImage {
-  constructor(title, width, rating, url, stillUrl, movingUrl, originalUrl) {
-    this.title = title;
-    this.width = width;
-    this.rating = rating;
-    this.url = url;
-    this.stillUrl = stillUrl;
-    this.movingUrl = movingUrl;
-    this.originalUrl = originalUrl;
-  }
-}
-
-
 function buildQueryUrl(query, offset, limit, rating) {
   let url = "https://api.giphy.com/v1/gifs/search?lang=en";
   url += "&api_key=" + apiKey;
@@ -89,15 +76,15 @@ function handleResponse(response, firstLoad) {
     favourite.text("Favourite");
     favourite.click(() => {
       if (!isFavourited(result.url)) {
-        const storedImage = new StoredImage(
-          imageTitle,
-          result.images.fixed_height.width,
-          imageRating,
-          result.url,
-          result.images.fixed_height_still.url,
-          result.images.fixed_height.url,
-          result.images.original.url);
-
+        const storedImage = {
+          title: imageTitle,
+          width: result.images.fixed_height.width,
+          rating: imageRating,
+          url: result.url,
+          stillUrl: result.images.fixed_height_still.url,
+          movingUrl: result.images.fixed_height.url,
+          originalUrl: result.images.original.url,
+        };
         favourites.push(storedImage);
         saveFavourites();
       }
@@ -105,6 +92,10 @@ function handleResponse(response, firstLoad) {
     actionGroup.append(favourite);
 
     division.append(actionGroup);
+
+    const divider = $("<hr>");
+    divider.addClass("divider");
+    division.append(divider);
 
     $(".images-area").append(division);
   }
