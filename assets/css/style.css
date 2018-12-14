@@ -38,6 +38,7 @@ p {
 
 .action {
   margin-right: .5em;
+  margin-bottom: .5em;
 }
 
 .action:last-child {
@@ -46,6 +47,7 @@ p {
 
 .action-group {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .button-generic {
@@ -66,7 +68,7 @@ p {
 }
 
 .divider {
-  margin-top: 1.5em;
+  margin-top: 1em;
   border-color: #ffffff;
 }
 
@@ -92,11 +94,13 @@ p {
 .images-footer {
   display: flex;
   justify-content: center;
-  padding: 1em;
+  padding: 1em 1em 3em 1em;
 }
 
 .instructions {
+  background-color: #c6519b;
   margin-top: 1em;
+  padding: 1em;
 }
 
 .metadata {
@@ -127,6 +131,9 @@ p {
 }
 
 #load-more {
+  background-color: #ffafcf;
+  border: none;
+  color: #000000;
   display: block;
   width: 50%;
 }
